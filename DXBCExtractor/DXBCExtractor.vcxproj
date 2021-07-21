@@ -139,13 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DXBCExtractor.cpp" />
-    <ClCompile Include="Operation.cpp" />
-    <ClCompile Include="OperationObject.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Instruction.cpp" />
+    <ClCompile Include="InstructionExtractor.cpp" />
+    <ClCompile Include="InstructionObject.cpp" />
+    <ClCompile Include="ResourceFile.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Operation.h" />
-    <ClInclude Include="OperationObject.h" />
+    <ClInclude Include="Instruction.h" />
+    <ClInclude Include="InstructionExtractor.h" />
+    <ClInclude Include="InstructionObject.h" />
+    <ClInclude Include="ResourceFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

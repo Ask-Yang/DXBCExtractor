@@ -15,21 +15,33 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DXBCExtractor.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Operation.cpp">
+    <ClCompile Include="Instruction.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="OperationObject.cpp">
+    <ClCompile Include="InstructionObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="InstructionExtractor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceFile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Operation.h">
+    <ClInclude Include="Instruction.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="OperationObject.h">
+    <ClInclude Include="InstructionObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="InstructionExtractor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
