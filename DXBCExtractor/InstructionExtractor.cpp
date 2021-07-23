@@ -1,5 +1,9 @@
 #include "InstructionExtractor.h"
 using namespace std;
+InstructionExtractor::InstructionExtractor(std::shared_ptr<ResourceFile> _resFile)
+{
+    resFile = _resFile;
+}
 std::shared_ptr<Instruction> InstructionExtractor::createInstruction(std::string line)
 {
     string delimiter = " ";

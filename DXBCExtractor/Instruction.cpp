@@ -58,3 +58,19 @@ void Instruction::build(std::string line)
 	else
 		swizzleList.push_back(line.substr(point + 1));
 }
+
+void InsMad::calu(std::shared_ptr<InstructionObject> dest, std::vector<std::shared_ptr<InstructionObject>> sources)
+{
+
+}
+
+void InsAdd::calu(std::shared_ptr<InstructionObject> dest, std::vector<std::shared_ptr<InstructionObject>> sources)
+{
+	vector<InstructionObject> temps;
+	for (int i = 0; i < sources.size(); i++)
+	{
+		InstructionObject temp;
+		temp = sources[i]->swizzle(swizzleList[i]);
+
+	}
+}

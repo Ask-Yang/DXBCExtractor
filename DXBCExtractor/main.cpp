@@ -25,11 +25,13 @@ void instructionObjectExtractor(string line, vector<shared_ptr<InstructionObject
 void  findInstructionObject(int lineNumber, shared_ptr<InstructionTreeNode> destNode);
 
 vector<string> dxbcSrc;
-InstructionExtractor insExtractor;
 
 int main()
 {
-    readTXTtoVec(dxbcSrc, "dxbc.txt");
+    shared_ptr<ResourceFile> resFile = make_shared<ResourceFile>();
+    InstructionExtractor insExtractor(resFile);
+
+   // readTXTtoVec(dxbcSrc, "dxbc.txt");
 
 }
 
