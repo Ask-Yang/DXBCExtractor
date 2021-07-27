@@ -10,29 +10,31 @@
 #include "InstructionObject.h"
 #include "InstructionExtractor.h"
 using namespace std;
-
+struct InstructionTreeNode;
+typedef shared_ptr<InstructionTreeNode> InsTreeNodePtr;
 struct InstructionTreeNode{
-    shared_ptr<InstructionObject> dest;
-    shared_ptr<Instruction> operation;
-    vector<shared_ptr<InstructionTreeNode>> children;
-    shared_ptr<InstructionTreeNode> parent;
-    InstructionTreeNode(shared_ptr<InstructionObject> dest, shared_ptr<Instruction> operation);
-    InstructionTreeNode(shared_ptr<InstructionObject> dest);
+    InsObjPtr dest;
+    InsPtr operation;
+    vector<InsTreeNodePtr> children;
+    InsTreeNodePtr parent;
+    InstructionTreeNode(InsObjPtr dest, InsPtr operation);
+    InstructionTreeNode(InsObjPtr dest);
 };
 void readTXTtoVec(vector<string>& src, string filepath);
-bool isDesInstructionObjectLeft(string line, shared_ptr<InstructionObject> dest);
-void instructionObjectExtractor(string line, vector<shared_ptr<InstructionObject>>& sources, shared_ptr<Instruction> operation);
-void  findInstructionObject(int lineNumber, shared_ptr<InstructionTreeNode> destNode);
+void findInstructionObject(int lineNumber, InsTreeNodePtr destNode, vector<string>& dxbcSrc, InstructionExtractor& insExtractor);
 
-vector<string> dxbcSrc;
+
 
 int main()
 {
     shared_ptr<ResourceFile> resFile = make_shared<ResourceFile>();
     InstructionExtractor insExtractor(resFile);
-
-   // readTXTtoVec(dxbcSrc, "dxbc.txt");
-
+    vector<string> dxbcSrc;
+    readTXTtoVec(dxbcSrc, "dxbc.txt");
+    int srcFinal = dxbcSrc.size() - 2;
+    InsObjPtr finalObj = insExtractor.destObjExtract(dxbcSrc[srcFinal--]);
+    InsTreeNodePtr root = make_shared<InstructionTreeNode>(finalObj);
+    findInstructionObject(srcFinal, root, dxbcSrc, insExtractor);
 }
 
 void readTXTtoVec(vector<string>& src, string filepath)
@@ -48,39 +50,32 @@ void readTXTtoVec(vector<string>& src, string filepath)
     fin.close();
 }
 
-bool isDesInstructionObjectLeft(string line, shared_ptr<InstructionObject> dest)
-{
-    return dest->isObjectLeft(line);
-}
-
-void instructionObjectExtractor(string line, vector<shared_ptr<InstructionObject>>& sources, shared_ptr<Instruction> operation)
-{
-
-}
-
-void  findInstructionObject(int lineNumber, shared_ptr<InstructionTreeNode> destNode)
+void findInstructionObject(int lineNumber, InsTreeNodePtr destNode, vector<string>& dxbcSrc, InstructionExtractor& insExtractor)
 {
     int findLine = lineNumber;
-    while (findLine>=0 && !isDesInstructionObjectLeft(dxbcSrc[findLine--], destNode->dest));
+    while (findLine>=0 && !insExtractor.isObjectDest(dxbcSrc[findLine--], destNode->dest));
     if (findLine < 0)
         return;
-    vector<shared_ptr<InstructionObject>> sources;
-    shared_ptr<Instruction> operation;
-    instructionObjectExtractor(dxbcSrc[++findLine], sources, operation);
+    vector<InsObjPtr> sources;
+    InsPtr operation;
+    insExtractor.instructionObjectExtract(dxbcSrc[++findLine], sources, operation);
     destNode->operation = operation;
     for (auto& object : sources)
     {
-        shared_ptr<InstructionTreeNode> sourceTreeNode = make_shared<InstructionTreeNode>(object);
-        findInstructionObject(--findLine, sourceTreeNode);
+        InsTreeNodePtr sourceTreeNode = make_shared<InstructionTreeNode>(object);
+        findInstructionObject(--findLine, sourceTreeNode, dxbcSrc, insExtractor);
         sourceTreeNode->parent = destNode;
         destNode->children.push_back(sourceTreeNode);
     }
 }
 
-InstructionTreeNode::InstructionTreeNode(shared_ptr<InstructionObject> dest, shared_ptr<Instruction> operation)
+InstructionTreeNode::InstructionTreeNode(InsObjPtr dest, InsPtr operation)
 {
+    this->dest = dest;
+    this->operation = operation;
 }
 
-InstructionTreeNode::InstructionTreeNode(shared_ptr<InstructionObject> dest)
+InstructionTreeNode::InstructionTreeNode(InsObjPtr dest)
 {
+    this->dest = dest;
 }

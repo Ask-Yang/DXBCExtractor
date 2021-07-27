@@ -7,7 +7,7 @@ class Instruction
 {
 public:
 	Instruction(std::shared_ptr<ResourceFile> file, std::string line);
-	virtual void calu(std::shared_ptr<InstructionObject> dest, std::vector<std::shared_ptr<InstructionObject>> sources) = 0;
+	virtual void calu(InsObjPtr dest, std::vector<InsObjPtr> sources) = 0;
 protected:
 	void build(std::string line);
 	std::shared_ptr<ResourceFile> resFile;
@@ -16,12 +16,13 @@ protected:
 	std::vector<std::string> swizzleList;
 	std::string rawLine;
 };
+typedef std::shared_ptr<Instruction> InsPtr;
 // SetUp 没必要逆向，可以一开始解析完
 // Arithmetic, Texture 可以逆向
 // Flow control 可以一开始就把flow control拆出来，然后就当成两个文件处理，反正shader control少
 
 class InsMad : public Instruction {
-	void calu(std::shared_ptr<InstructionObject> dest, std::vector<std::shared_ptr<InstructionObject>> sources) override;
+	void calu(InsObjPtr dest, std::vector<InsObjPtr> sources) override;
 };
 
 class InsDp2 : public Instruction {
@@ -61,7 +62,7 @@ class InsMov : public Instruction {
 };
 
 class InsAdd : public Instruction {
-	void calu(std::shared_ptr<InstructionObject> dest, std::vector<std::shared_ptr<InstructionObject>> sources) override;
+	void calu(InsObjPtr dest, std::vector<InsObjPtr> sources) override;
 };
 
 class InsMax : public Instruction {

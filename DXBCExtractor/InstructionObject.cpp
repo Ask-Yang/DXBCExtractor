@@ -53,3 +53,33 @@ void InstructionObject::mask(std::string mask, InstructionObject& obj)
     }
        
 }
+
+InstructionObject operator+(const InstructionObject& left, const InstructionObject& right)
+{
+    InstructionObject obj;
+    obj.data[0] = left.data[0] + right.data[0];
+    obj.data[1] = left.data[1] + right.data[1];
+    obj.data[2] = left.data[2] + right.data[2];
+    obj.data[3] = left.data[3] + right.data[3];
+    return obj;
+}
+
+InstructionObject operator*(const InstructionObject& left, const InstructionObject& right)
+{
+    InstructionObject obj;
+    obj.data[0] = left.data[0] * right.data[0];
+    obj.data[1] = left.data[1] * right.data[1];
+    obj.data[2] = left.data[2] * right.data[2];
+    obj.data[3] = left.data[3] * right.data[3];
+    return obj;
+}
+
+InstructionObject operator-(const InstructionObject& left, const InstructionObject& right)
+{
+    InstructionObject obj;
+    obj.data[0] = left.data[0] - right.data[0];
+    obj.data[1] = left.data[1] - right.data[1];
+    obj.data[2] = left.data[2] - right.data[2];
+    obj.data[3] = left.data[3] - right.data[3];
+    return obj;
+}

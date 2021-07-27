@@ -1,19 +1,26 @@
 #pragma once
 #include <string>
 #include <vector>
-class InstructionObject
+#include <iostream>
+struct InstructionObject
 {
-public:
 	InstructionObject();
 	InstructionObject(std::string regName);
 	
-public:
 	void setName(std::string regName);
 	virtual bool isObjectLeft(std::string line);
 	InstructionObject swizzle(std::string swizzle);
 	void mask(std::string mask, InstructionObject& obj);
-private:
+	bool operator==(const std::string str) {
+		return name == str;
+	}
+
 	std::string name;
 	std::vector<float> data;
 };
+InstructionObject operator+(const InstructionObject& left, const InstructionObject& right);
+InstructionObject operator*(const InstructionObject& left, const InstructionObject& right);
+InstructionObject operator-(const InstructionObject& left, const InstructionObject& right);
 
+
+typedef std::shared_ptr<InstructionObject> InsObjPtr;
