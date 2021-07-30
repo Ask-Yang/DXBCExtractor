@@ -139,13 +139,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InsNode.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Instruction.cpp" />
     <ClCompile Include="InstructionExtractor.cpp" />
     <ClCompile Include="InstructionObject.cpp" />
+    <ClCompile Include="main2.cpp" />
     <ClCompile Include="ResourceFile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InsNode.h" />
     <ClInclude Include="Instruction.h" />
     <ClInclude Include="InstructionExtractor.h" />
     <ClInclude Include="InstructionObject.h" />

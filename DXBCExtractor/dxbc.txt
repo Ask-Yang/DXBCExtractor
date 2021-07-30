@@ -1,0 +1,5 @@
+add r0.xyzw, r0.xyzw
+max r2.xy, r0.wwww, l(0.0000, 0.0010, 0.0000, 0.0000)
+mad r0.xyz, r0.xyzx, l(0.5000, 0.5000, 0.5000, 0.0000), l(0.5000, 0.5000, 0.5000, 0.0000)
+mov o0.xyzw, -r0.xyzw, r2.xyzw
+ret

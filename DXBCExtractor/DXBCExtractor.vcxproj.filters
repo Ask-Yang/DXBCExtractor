@@ -30,6 +30,12 @@
     <ClCompile Include="ResourceFile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="main2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="InsNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Instruction.h">
@@ -42,6 +48,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ResourceFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="InsNode.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

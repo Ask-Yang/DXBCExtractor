@@ -4,7 +4,7 @@
 #include <set>
 #include "Instruction.h"
 #include "ResourceFile.h"
-
+#include "InsNode.h"
 class InstructionExtractor
 {
 public:

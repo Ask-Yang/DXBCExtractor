@@ -25,7 +25,7 @@ bool InstructionExtractor::isObjectDest(string line, InsObjPtr dest)
     {
         last = next + 1;
         string destStr;
-        if ((next = line.find(delimiter)) != string::npos)
+        if ((next = line.find(delimiter, last)) != string::npos)
             destStr = line.substr(last, next - last);
         else
             destStr = line.substr(last);
@@ -42,7 +42,7 @@ InsPtr InstructionExtractor::createInstruction(std::string line)
     string delimiter = " ";
     size_t pos = 0;
     string insStr;
-    if ((pos = line.find(delimiter) != string::npos))
+    if ((pos = line.find(delimiter)) != string::npos)
         insStr = line.substr(0, pos);
     else
         return nullptr;
@@ -50,31 +50,31 @@ InsPtr InstructionExtractor::createInstruction(std::string line)
     if (instructionLibrary.find(insStr) != instructionLibrary.end())
     {
         if (insStr == "mad")
-            return make_shared<InsMad>(resFile, insStr);
+            return make_shared<InsMad>(resFile, line);
         else if (insStr == "dp2")
-            return make_shared<InsDp2>(resFile, insStr);
+            return make_shared<InsDp2>(resFile, line);
         else if (insStr == "sample_indexable")
-            return make_shared<InsSample_indexable>(resFile, insStr);
+            return make_shared<InsSample_indexable>(resFile, line);
         else if (insStr == "sqrt")
-            return make_shared<InsSqrt>(resFile, insStr);
+            return make_shared<InsSqrt>(resFile, line);
         else if (insStr == "lt")
-            return make_shared<InsLt>(resFile, insStr);
+            return make_shared<InsLt>(resFile, line);
         else if (insStr == "movc")
-            return make_shared<InsMovc>(resFile, insStr);
+            return make_shared<InsMovc>(resFile, line);
         else if (insStr == "dp3")
-            return make_shared<InsDp3>(resFile, insStr);
+            return make_shared<InsDp3>(resFile, line);
         else if (insStr == "rsq")
-            return make_shared<InsRsq>(resFile, insStr);
+            return make_shared<InsRsq>(resFile, line);
         else if (insStr == "mul")
-            return make_shared<InsMul>(resFile, insStr);
+            return make_shared<InsMul>(resFile, line);
         else if (insStr == "mov")
-            return make_shared<InsMov>(resFile, insStr);
+            return make_shared<InsMov>(resFile, line);
         else if (insStr == "add")
-            return make_shared<InsAdd>(resFile, insStr);
+            return make_shared<InsAdd>(resFile, line);
         else if (insStr == "max")
-            return make_shared<InsMax>(resFile, insStr);
+            return make_shared<InsMax>(resFile, line);
         else if (insStr == "log")
-            return make_shared<InsLog>(resFile, insStr);
+            return make_shared<InsLog>(resFile, line);
         else
             return nullptr;
     }
@@ -90,7 +90,7 @@ void InstructionExtractor::createInsObject(std::string line, InsObjPtr& dest, st
     {
         last = next + 1;
         string destStr;
-        if ((next = line.find(delimiter)) != string::npos)
+        if ((next = line.find(delimiter, last)) != string::npos)
             destStr = line.substr(last, next - last);
         else
             destStr = line.substr(last);
@@ -103,29 +103,50 @@ void InstructionExtractor::createInsObject(std::string line, InsObjPtr& dest, st
     }
 
     last = next + 1;
+    if (line[last] == '-')
+        ++last;
     InsObjPtr source;
-    while ((next = line.find(delimiter)) != string::npos)
+    while ((next = line.find(delimiter, last)) != string::npos)
     {
-        string objStr = line.substr(last, next - last);
+        if (line[last] == '-')
+            ++last;
+        string objStr;
+        if (line[last] == 'l' && line[last + 1] == '(')
+        {
+            next = line.find(")", last);
+            ++next;
+            objStr = line.substr(last, next - last);
+            ++next;
+        }
+        else
+            objStr = line.substr(last, next - last);
         source = createSingleInsObj(objStr);
         sources.push_back(source);
         last = next + 1;
     }
-    source = createSingleInsObj(line.substr(last));
+    if (last > line.size())
+        return;
+    if (line[last] == '-')
+        ++last;
+    source = createSingleInsObj(line.substr(last));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     sources.push_back(source);
 }
 
 InsObjPtr InstructionExtractor::createSingleInsObj(std::string objStr)
 {
+    if (objStr == "")
+        return nullptr;
     size_t point = 0;
     InsObjPtr obj;
-    if ((point = objStr.find(".")) != string::npos)
+    if (((point = objStr.find(".")) != string::npos) && objStr[0] != 'l' && objStr[1] != '(')
         objStr = objStr.substr(0, point);
     if (resFile->res.find(objStr) != resFile->res.end())
         obj = resFile->res[objStr];
     else
     {
         obj = make_shared<InstructionObject>(objStr);
+        InsNodePtr node = make_shared<InsNode>(Vec4f(0, 0, 0, 0));
+        obj->setInitNode(node);
         resFile->res[objStr] = obj;
     }
     return obj;
