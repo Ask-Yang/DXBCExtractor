@@ -9,6 +9,7 @@ typedef std::shared_ptr<InsNode> InsNodePtr;
 
 struct InstructionObject;
 typedef std::shared_ptr<InstructionObject> InsObjPtr;
+typedef std::weak_ptr<InstructionObject> InsObjWeak;
 
 struct Vec4f {
 	float x, y, z, w;
@@ -21,7 +22,7 @@ std::ostream& operator<<(std::ostream& os, const Vec4f& v);
 
 struct InsNode {
 	Vec4f destValue;
-	InsObjPtr destObj;
+	InsObjWeak destObj;
 	InsNodePtr pre;
 	InsNodePtr next;
 	std::vector<InsNodePtr> sources;
@@ -38,7 +39,8 @@ struct InsNode {
 	}
 	void exec();
 	void print() {
-		std::cout << line;
+		std::cout << line << std::endl;
 	}
+	InsObjPtr getDest();
 };
 void connectTwoNode(InsNodePtr pre, InsNodePtr next);

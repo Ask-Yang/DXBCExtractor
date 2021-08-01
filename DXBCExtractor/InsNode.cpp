@@ -17,13 +17,21 @@ void InsNode::exec()
 	vector<InsObjPtr> sourceObjs;
 	for (auto& node : sources)
 	{
-		sourceObjs.push_back(node->destObj);
+		sourceObjs.push_back(node->getDest());
 	}
-	if (destObj)
+	if (InsObjPtr dest = destObj.lock())
 	{
-		instruction->calcu(destObj, sourceObjs);
-		destValue = Vec4f(destObj);
+		instruction->calcu(dest, sourceObjs);
+		destValue = Vec4f(dest);
 	}
+}
+
+InsObjPtr InsNode::getDest()
+{
+	if (InsObjPtr dest = destObj.lock())
+		return dest;
+	else
+		return nullptr;
 }
 
 Vec4f::Vec4f()

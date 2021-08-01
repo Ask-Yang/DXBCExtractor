@@ -5,6 +5,7 @@
 
 struct InsNode;
 typedef std::shared_ptr<InsNode> InsNodePtr;
+typedef std::weak_ptr<InsNode> InsNodeWeak;
 struct Vec4f;
 
 struct InstructionObject

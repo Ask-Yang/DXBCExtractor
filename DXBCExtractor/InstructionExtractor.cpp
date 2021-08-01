@@ -53,7 +53,7 @@ InsPtr InstructionExtractor::createInstruction(std::string line)
             return make_shared<InsMad>(resFile, line);
         else if (insStr == "dp2")
             return make_shared<InsDp2>(resFile, line);
-        else if (insStr == "sample_indexable")
+        else if (insStr == "sample_indexable(texture2d)(float,float,float,float)")
             return make_shared<InsSample_indexable>(resFile, line);
         else if (insStr == "sqrt")
             return make_shared<InsSqrt>(resFile, line);
@@ -146,6 +146,7 @@ InsObjPtr InstructionExtractor::createSingleInsObj(std::string objStr)
     {
         obj = make_shared<InstructionObject>(objStr);
         InsNodePtr node = make_shared<InsNode>(Vec4f(0, 0, 0, 0));
+        node->destObj = obj;
         obj->setInitNode(node);
         resFile->res[objStr] = obj;
     }
