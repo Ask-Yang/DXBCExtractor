@@ -7,7 +7,8 @@ struct InsNode;
 typedef std::shared_ptr<InsNode> InsNodePtr;
 typedef std::weak_ptr<InsNode> InsNodeWeak;
 struct Vec4f;
-
+struct InstructionObject;
+typedef std::shared_ptr<InstructionObject> InsObjPtr;
 struct InstructionObject
 {
 	InstructionObject();
@@ -28,6 +29,8 @@ struct InstructionObject
 	void print();
 	InsNodePtr objRoot;
 	InsNodePtr currentNode;
+	InsObjPtr CalcuObj;
+
 	std::string name;
 	std::vector<float> data;
 };
@@ -35,5 +38,3 @@ InstructionObject operator+(const InstructionObject& left, const InstructionObje
 InstructionObject operator*(const InstructionObject& left, const InstructionObject& right);
 InstructionObject operator-(const InstructionObject& left, const InstructionObject& right);
 InstructionObject operator*(const InstructionObject& left, const int& right);
-
-typedef std::shared_ptr<InstructionObject> InsObjPtr;

@@ -24,11 +24,11 @@ InstructionObject::InstructionObject(std::string regName)
         }
         if(num == 3)
             data[3] = stof(numStr.substr(last));
-        else
+        else if (num == 0)
         {
-            for (int i = num; i < 4; i++)
-                data[i] = 0;
+            data[0] = stof(numStr);
         }
+
     }
 }
 
@@ -102,13 +102,15 @@ void InstructionObject::setInitNodeValue(Vec4f val)
 void InstructionObject::setInitNode(InsNodePtr initNode)
 {
     objRoot = initNode;
+    objRoot->destValue = Vec4f(data[0], data[1], data[2], data[3]);
     currentNode = objRoot;
 }
 
 void InstructionObject::print()
 {
     Vec4f initVal = objRoot->destValue;
-    cout << "Object Name: " << name << " " << "Init Value: " << initVal << endl;
+    cout << endl << endl;
+    cout << "Object Name: " << name << " " << "Init Value: " << initVal;
     InsNodePtr cur = objRoot;
     while (cur) {
         cur->print();

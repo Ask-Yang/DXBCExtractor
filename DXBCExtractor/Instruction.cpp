@@ -6,6 +6,10 @@ Instruction::Instruction(std::shared_ptr<ResourceFile> file, std::string line)
 	build(line);
 }
 
+void Instruction::calcu(InsObjPtr dest, std::vector<InsObjPtr> sources)
+{
+}
+
 // 有三种情况 
 // 第一种是只有一个命令 类似 ps_2_2 / nop
 // 第二种是只有一个命令和一个dst 类似 texkill dst
@@ -20,7 +24,7 @@ void Instruction::build(std::string line)
 	size_t next = 0, last = 0, point = 0;
 	string token;
 	if ((next = line.find(space, last)) != string::npos)
-		name = line.substr(last, next);
+		name = line.substr(last, next - last);
 	else
 	{
 		name = line;
@@ -32,8 +36,7 @@ void Instruction::build(std::string line)
 		return;
 	if ((next = line.find(space, last)) != string::npos)
 	{
-		if(point < next) // for preventing the case: ins dst, src.xyz
-			mask = line.substr(point + 1, next - 1 - point - 1); 
+		mask = line.substr(point + 1, next - 1 - point - 1); 
 	}
 	else
 	{
@@ -46,21 +49,27 @@ void Instruction::build(std::string line)
 	while ((next = line.find(space, last)) != string::npos)
 	{
 		if (line[last] == '-')
+		{
+			++last;
 			minusList.push_back(-1);
+		}
 		else
 			minusList.push_back(1);
-		point = line.substr(last, next).find(under_point);
+		point = line.substr(last, next - last).find_last_of(under_point);
 		if (point == string::npos)
 			swizzleList.push_back("");
 		else
-			swizzleList.push_back(line.substr(point + 1, next - 1 - point - 1));
+			swizzleList.push_back(line.substr(last + point + 1, next - 1 - (last + point + 1)));
 		last = next + 1;
 	}
 	if (line[last] == '-')
+	{
+		++last;
 		minusList.push_back(-1);
+	}
 	else
 		minusList.push_back(1);
-	point = line.find(under_point, last);
+	point = line.find_last_of(under_point);
 	if (point == string::npos)
 		swizzleList.push_back("");
 	else
@@ -190,5 +199,14 @@ InsLog::InsLog(std::shared_ptr<ResourceFile> file, std::string line)
 }
 
 void InsLog::calcu(InsObjPtr dest, std::vector<InsObjPtr> sources)
+{
+}
+
+InsExp::InsExp(std::shared_ptr<ResourceFile> file, std::string line)
+	:Instruction(file, line)
+{
+}
+
+void InsExp::calcu(InsObjPtr dest, std::vector<InsObjPtr> sources)
 {
 }

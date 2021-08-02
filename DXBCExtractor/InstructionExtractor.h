@@ -16,8 +16,8 @@ public:
 	InsPtr createInstruction(std::string line);
 	void createInsObject(std::string line, InsObjPtr& dest, std::vector<InsObjPtr>& sources);
 	std::set<std::string> instructionLibrary{
-		"mad", "dp2", "sample_indexable", "sqrt", "lt", "movc", "dp3", "rsq",
-		"mul", "mov", "add", "max", "log"
+		"mad", "dp2", "sample_indexable(texture2d)(float,float,float,float)", "sqrt", "lt", "movc", "dp3", "rsq",
+		"mul", "mov", "add", "max", "log", "exp"
 	};
 private:
 	std::shared_ptr<ResourceFile> resFile;

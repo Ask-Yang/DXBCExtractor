@@ -7,7 +7,7 @@ class Instruction
 {
 public:
 	Instruction(std::shared_ptr<ResourceFile> file, std::string line);
-	virtual void calcu(InsObjPtr dest, std::vector<InsObjPtr> sources) = 0;
+	virtual void calcu(InsObjPtr dest, std::vector<InsObjPtr> sources);
 protected:
 	void build(std::string line);
 	std::shared_ptr<ResourceFile> resFile;
@@ -97,5 +97,11 @@ public:
 class InsLog : public Instruction {
 public:
 	InsLog(std::shared_ptr<ResourceFile> file, std::string line);
+	void calcu(InsObjPtr dest, std::vector<InsObjPtr> sources) override;
+};
+
+class InsExp : public Instruction {
+public:
+	InsExp(std::shared_ptr<ResourceFile> file, std::string line);
 	void calcu(InsObjPtr dest, std::vector<InsObjPtr> sources) override;
 };

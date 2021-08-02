@@ -75,11 +75,13 @@ InsPtr InstructionExtractor::createInstruction(std::string line)
             return make_shared<InsMax>(resFile, line);
         else if (insStr == "log")
             return make_shared<InsLog>(resFile, line);
+        else if (insStr == "exp")
+            return make_shared<InsExp>(resFile, line);
         else
-            return nullptr;
+            return make_shared<Instruction>(resFile, line);
     }
     else
-        return nullptr;
+        return make_shared<Instruction>(resFile, line);
 }
 
 void InstructionExtractor::createInsObject(std::string line, InsObjPtr& dest, std::vector<InsObjPtr>& sources)
@@ -144,9 +146,14 @@ InsObjPtr InstructionExtractor::createSingleInsObj(std::string objStr)
         obj = resFile->res[objStr];
     else
     {
+        // 为了防止循环引用，使用一个Calcu的obj作为对应的计算单元，所有计算将会对这个单元进行，而绑定到resFile上的则是另一个
+        // 作为和指令对应的绑定单元
         obj = make_shared<InstructionObject>(objStr);
         InsNodePtr node = make_shared<InsNode>(Vec4f(0, 0, 0, 0));
-        node->destObj = obj;
+        InsObjPtr objCalcu = make_shared<InstructionObject>(objStr);
+        node->destObj = objCalcu;
+        // node->line = "Object Start Here: ";
+        obj->CalcuObj = objCalcu;
         obj->setInitNode(node);
         resFile->res[objStr] = obj;
     }
