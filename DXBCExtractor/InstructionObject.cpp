@@ -91,6 +91,8 @@ void InstructionObject::setNewNode(InsNodePtr next)
 {
     currentNode->next = next;
     next->pre = currentNode;
+    for (auto sign : currentNode->signs)
+        next->signs.insert(sign);
     currentNode = currentNode->next;
 }
 

@@ -151,7 +151,9 @@ InsObjPtr InstructionExtractor::createSingleInsObj(std::string objStr)
         obj = make_shared<InstructionObject>(objStr);
         InsNodePtr node = make_shared<InsNode>(Vec4f(0, 0, 0, 0));
         InsObjPtr objCalcu = make_shared<InstructionObject>(objStr);
+        objCalcu->setName(objStr);
         node->destObj = objCalcu;
+        node->signs.insert(objStr);
         // node->line = "Object Start Here: ";
         obj->CalcuObj = objCalcu;
         obj->setInitNode(node);

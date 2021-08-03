@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include <ostream>
+#include <sstream>
+#include <set>
 #include "Instruction.h"
 struct InsNode;
 typedef std::shared_ptr<InsNode> InsNodePtr;
@@ -21,26 +23,22 @@ struct Vec4f {
 std::ostream& operator<<(std::ostream& os, const Vec4f& v);
 
 struct InsNode {
+	static int printMode; // 0是所有输入变量只要接触了这个寄存器就会被保留，1是只有上一次直接接触才会被保留
+	int lineNumber;
 	Vec4f destValue;
 	InsObjWeak destObj;
 	InsNodePtr pre;
 	InsNodePtr next;
 	std::vector<InsNodePtr> sources;
+	std::set<std::string> signs;
 	InsPtr instruction;
 	std::string line;
-	InsNode(Vec4f val) {
-		destValue = val;
-	}
-	InsNode(std::string _line, InsObjPtr _destObj, std::vector<InsNodePtr> _sources, InsPtr _instruction) {
-		line = _line;
-		destObj = _destObj;
-		sources = _sources;
-		instruction = _instruction;
-	}
+	InsNode(Vec4f val);
+	InsNode(std::string _line, InsObjPtr _destObj, std::vector<InsNodePtr> _sources, InsPtr _instruction, size_t _lineNumber);
 	void exec();
-	void print() {
-		std::cout << line << std::endl;
-	}
+	std::string print();
+	bool isObjShield(std::string str);
 	InsObjPtr getDest();
 };
+
 void connectTwoNode(InsNodePtr pre, InsNodePtr next);

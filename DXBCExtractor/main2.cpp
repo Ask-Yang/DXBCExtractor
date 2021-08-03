@@ -2,12 +2,17 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <set>
 
 #include "Instruction.h"
 #include "InstructionObject.h"
 #include "InstructionExtractor.h"
 #include "InsNode.h"
 using namespace std;
+
+set<string> shieldList = {
+    "r#", "t#"
+};
 
 size_t findFirstLetter(string str) {
     size_t pos = 10000;
@@ -46,6 +51,15 @@ void readTXTtoVec2(vector<string>& src, string filepath)
     }
     fin.close();
 }
+void writeVecToTXT(vector<string>& src, string filepath)
+{
+    ofstream outFile(filepath);
+    for (int i = 0; i < src.size(); i++)
+    {
+        outFile << src[i];
+    }
+    outFile.close();
+}
 
 void setInitNodes(vector<InsNodePtr>& sourceNodes) {
 
@@ -59,8 +73,8 @@ int main() {
     vector<InsNodePtr> nodes;
     for (int i = 0; i < dxbcSrc.size() - 1; i++) // skip ret
     {
-        //if (i == 10)
-        //    cout << "debug" << endl;
+        if (i == 34)
+            cout << "debug" << endl;
         InsObjPtr dest;
         vector<InsObjPtr> sources;
         InsPtr instruction;
@@ -69,15 +83,19 @@ int main() {
         vector<InsNodePtr> sourceNodes;
         for (auto& insObj : sources)
             sourceNodes.push_back(insObj->getCurrentNode());
-        InsNodePtr current = make_shared<InsNode>(dxbcSrc[i], dest->CalcuObj, sourceNodes, instruction);
+        InsNodePtr current = make_shared<InsNode>(dxbcSrc[i], dest->CalcuObj, sourceNodes, instruction, i);
         if(dest)
             dest->setNewNode(current);
         nodes.push_back(current);
     }
+    vector<string> outFile;
     setInitNodes(nodes);
     for (int i=0;i<nodes.size();i++)
         nodes[i]->exec();
-    for (auto& objPair : resFile->res)
-        objPair.second->print();
+    for (auto& node : nodes)
+        outFile.push_back(node->print());
+    writeVecToTXT(outFile, "out.txt");
+    //for (auto& objPair : resFile->res) // °´¼Ä´æÆ÷Êä³ö
+        //objPair.second->print();
 	return 0;
 }
