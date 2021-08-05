@@ -8,6 +8,7 @@
 #include "InstructionObject.h"
 #include "InstructionExtractor.h"
 #include "InsNode.h"
+#include "ObjNameAdapter.h"
 using namespace std;
 
 set<string> shieldList = {
@@ -93,9 +94,19 @@ int main() {
     for (int i=0;i<nodes.size();i++)
         nodes[i]->exec();
     for (auto& node : nodes)
-        outFile.push_back(node->print());
+        outFile.push_back(node->print2());
     writeVecToTXT(outFile, "out.txt");
     //for (auto& objPair : resFile->res) // °´¼Ä´æÆ÷Êä³ö
         //objPair.second->print();
 	return 0;
+}
+
+int main4342()
+{
+    ObjNameAdapter ad("r0");
+    ad.mask("xy");
+    ad.mask("yw");
+    cout << ad.swizzle("xyxx") << endl;
+
+    return 0;
 }

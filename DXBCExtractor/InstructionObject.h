@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
+#include "ObjNameAdapter.h"
 struct InsNode;
 typedef std::shared_ptr<InsNode> InsNodePtr;
 typedef std::weak_ptr<InsNode> InsNodeWeak;
@@ -30,6 +30,7 @@ struct InstructionObject
 	InsNodePtr objRoot;
 	InsNodePtr currentNode;
 	InsObjPtr CalcuObj;
+	NameAdapterPtr adapter;
 
 	std::string name;
 	std::vector<float> data;

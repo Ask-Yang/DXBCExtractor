@@ -33,10 +33,12 @@ struct InsNode {
 	std::set<std::string> signs;
 	InsPtr instruction;
 	std::string line;
+	std::string transformLine;
 	InsNode(Vec4f val);
 	InsNode(std::string _line, InsObjPtr _destObj, std::vector<InsNodePtr> _sources, InsPtr _instruction, size_t _lineNumber);
 	void exec();
 	std::string print();
+	std::string print2();
 	bool isObjShield(std::string str);
 	InsObjPtr getDest();
 };

@@ -8,7 +8,7 @@ class Instruction
 public:
 	Instruction(std::shared_ptr<ResourceFile> file, std::string line);
 	virtual void calcu(InsObjPtr dest, std::vector<InsObjPtr> sources);
-protected:
+public:
 	void build(std::string line);
 	std::shared_ptr<ResourceFile> resFile;
 	std::string name;

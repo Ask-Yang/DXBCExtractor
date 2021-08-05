@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -145,6 +145,7 @@
     <ClCompile Include="InstructionExtractor.cpp" />
     <ClCompile Include="InstructionObject.cpp" />
     <ClCompile Include="main2.cpp" />
+    <ClCompile Include="ObjNameAdapter.cpp" />
     <ClCompile Include="ResourceFile.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +153,7 @@
     <ClInclude Include="Instruction.h" />
     <ClInclude Include="InstructionExtractor.h" />
     <ClInclude Include="InstructionObject.h" />
+    <ClInclude Include="ObjNameAdapter.h" />
     <ClInclude Include="ResourceFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

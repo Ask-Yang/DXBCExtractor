@@ -30,7 +30,7 @@ void InsNode::exec()
 	}
 }
 
-string InsNode::print()
+string InsNode::print() // print()是输出每个资源可能经过的操作的行数
 {
 	stringstream out;
 	out << lineNumber << ": ";
@@ -49,6 +49,22 @@ string InsNode::print()
 	cout<<outLine;
 	return out.str();
 }
+string InsNode::print2() // print2()是跟踪每个寄存器对应通道的变化
+{
+	stringstream out;
+	out << lineNumber << ": ";
+	out << line;
+
+	for (int i = line.size() + to_string(lineNumber).size(); i < 120; i++)
+		out << " ";
+	out << lineNumber << ": ";
+	out << transformLine;
+	out << endl;
+	string outLine = out.str();
+	cout << outLine;
+	return out.str();
+}
+
 InsNode::InsNode(Vec4f val)
 	:lineNumber(-1)
 {
@@ -61,6 +77,7 @@ InsNode::InsNode(std::string _line, InsObjPtr _destObj, std::vector<InsNodePtr> 
 	destObj = _destObj;
 	sources = _sources;
 	instruction = _instruction;
+
 	for (auto& obj : sources)
 	{
 		if (printMode == 0)
@@ -74,6 +91,24 @@ InsNode::InsNode(std::string _line, InsObjPtr _destObj, std::vector<InsNodePtr> 
 				signs.insert(p->name);
 		}
 	}
+	// 创建transformLine
+	string behind;
+	for (int i = 0; i < sources.size(); i++)
+	{
+		if (auto p = sources[i]->destObj.lock())
+			behind += p->adapter->swizzle(instruction->swizzleList[i]);
+		behind += ", ";
+	}
+	behind.pop_back();
+	behind.pop_back();
+
+	string traStr;
+	if (auto p = destObj.lock())
+	{
+		traStr = p->adapter->mask(instruction->mask);
+	}
+	traStr += " = " + behind;
+	transformLine = traStr;
 }
 InsObjPtr InsNode::getDest()
 {
