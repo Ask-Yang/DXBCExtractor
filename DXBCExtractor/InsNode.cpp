@@ -77,7 +77,7 @@ InsNode::InsNode(std::string _line, InsObjPtr _destObj, std::vector<InsNodePtr> 
 	destObj = _destObj;
 	sources = _sources;
 	instruction = _instruction;
-
+	int count = 0;
 	for (auto& obj : sources)
 	{
 		if (printMode == 0)
@@ -90,6 +90,18 @@ InsNode::InsNode(std::string _line, InsObjPtr _destObj, std::vector<InsNodePtr> 
 			if (auto p = obj->destObj.lock())
 				signs.insert(p->name);
 		}
+		else if (printMode == 2)
+		{
+			string sourceName;
+			if (auto p = obj->destObj.lock())
+				sourceName = p->name;
+			sourceName += "." + instruction->swizzleList[count];
+			signs.insert(sourceName);
+
+			for (auto s : obj->signs)
+				signs.insert(s);
+		}
+		++count;
 	}
 	// 创建transformLine
 	string behind;
@@ -122,6 +134,10 @@ bool InsNode::isObjShield(string str)
 {
 	if (str.size() > 3 && str[0] == 'l' && str[1] == '(')
 		return true;// 立即数
+	size_t point;
+	if ((point = str.find(".")) != string::npos)
+		str = str.substr(0, point);
+
 	for (auto s:shieldList)
 	{
 		if (s.size() != str.size())

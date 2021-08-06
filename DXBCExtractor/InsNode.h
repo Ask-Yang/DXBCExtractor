@@ -24,6 +24,7 @@ std::ostream& operator<<(std::ostream& os, const Vec4f& v);
 
 struct InsNode {
 	static int printMode; // 0是所有输入变量只要接触了这个寄存器就会被保留，1是只有上一次直接接触才会被保留
+						  // 2是带后缀的mode1
 	int lineNumber;
 	Vec4f destValue;
 	InsObjWeak destObj;

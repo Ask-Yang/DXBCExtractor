@@ -72,6 +72,7 @@ int main() {
     vector<string> dxbcSrc;
     readTXTtoVec2(dxbcSrc, "D:\\DXBCExtractor_github\\DXBCExtractor\\dxbc.txt");
     vector<InsNodePtr> nodes;
+    InsNode::printMode = 2;
     for (int i = 0; i < dxbcSrc.size() - 1; i++) // skip ret
     {
         if (i == 34)
@@ -93,6 +94,7 @@ int main() {
     setInitNodes(nodes);
     for (int i=0;i<nodes.size();i++)
         nodes[i]->exec();
+    
     for (auto& node : nodes)
         outFile.push_back(node->print2());
     writeVecToTXT(outFile, "out.txt");
