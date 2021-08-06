@@ -88,6 +88,7 @@ void InstructionExtractor::createInsObject(std::string line, InsObjPtr& dest, st
 {
     string delimiter = " ";
     size_t last = 0, next = 0;
+    /// 创建dest对象
     if((next = line.find(delimiter)) != string::npos)
     {
         last = next + 1;
@@ -104,8 +105,9 @@ void InstructionExtractor::createInsObject(std::string line, InsObjPtr& dest, st
         return;
     }
 
+    /// 创建sources对象
     last = next + 1;
-    if (line[last] == '-')
+    if (line[last] == '-') 
         ++last;
     InsObjPtr source;
     while ((next = line.find(delimiter, last)) != string::npos)
@@ -113,7 +115,7 @@ void InstructionExtractor::createInsObject(std::string line, InsObjPtr& dest, st
         if (line[last] == '-')
             ++last;
         string objStr;
-        if (line[last] == 'l' && line[last + 1] == '(')
+        if (line[last] == 'l' && line[last + 1] == '(') /// 判断立即数
         {
             next = line.find(")", last);
             ++next;
@@ -146,17 +148,17 @@ InsObjPtr InstructionExtractor::createSingleInsObj(std::string objStr)
         obj = resFile->res[objStr];
     else
     {
-        // 为了防止循环引用，使用一个Calcu的obj作为对应的计算单元，所有计算将会对这个单元进行，而绑定到resFile上的则是另一个
-        // 作为和指令对应的绑定单元
+        /// 为了防止循环引用，使用一个Calcu的obj作为对应的计算单元，所有计算将会对这个单元进行，而绑定到resFile上的则是另一个
+        /// 用于记录这个寄存器经过了多少指令的单元
         obj = make_shared<InstructionObject>(objStr);
-        InsNodePtr node = make_shared<InsNode>(Vec4f(0, 0, 0, 0));
-        InsObjPtr objCalcu = make_shared<InstructionObject>(objStr);
-        objCalcu->setName(objStr);
+        InsNodePtr node = make_shared<InsNode>(Vec4f(0, 0, 0, 0)); /// 创建初始节点
+        InsObjPtr objCalcu = make_shared<InstructionObject>(objStr); /// 创建计算单元
+        NameAdapterPtr adapter = make_shared<ObjNameAdapter>(objStr); /// 创建寄存器名字适配器
         node->destObj = objCalcu;
-        //node->signs.insert(objStr);
-        NameAdapterPtr adapter = make_shared<ObjNameAdapter>(objStr);
-        objCalcu->adapter = adapter;
-        // node->line = "Object Start Here: ";
+
+        objCalcu->setName(objStr);
+        objCalcu->adapter = adapter;     
+
         obj->CalcuObj = objCalcu;
         obj->setInitNode(node);
         resFile->res[objStr] = obj;

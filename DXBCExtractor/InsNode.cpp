@@ -4,7 +4,7 @@ using namespace std;
 
 extern set<string> shieldList;
 
-int InsNode::printMode = 0;
+int InsNode::printMode = 2;
 ostream& operator<<(ostream& os, const Vec4f& v)
 {
 	cout << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
@@ -30,7 +30,7 @@ void InsNode::exec()
 	}
 }
 
-string InsNode::print() // print()是输出每个资源可能经过的操作的行数
+string InsNode::print() /// print()是输出每个资源可能经过的操作的行数
 {
 	stringstream out;
 	out << lineNumber << ": ";
@@ -41,7 +41,7 @@ string InsNode::print() // print()是输出每个资源可能经过的操作的行数
 	out << lineNumber << ": ";
 	for (auto str : signs)
 	{
-		if(!isObjShield(str))
+		if(!isObjShield(str)) 
 			out << str << " ";
 	}
 	out << endl;
@@ -49,7 +49,7 @@ string InsNode::print() // print()是输出每个资源可能经过的操作的行数
 	cout<<outLine;
 	return out.str();
 }
-string InsNode::print2() // print2()是跟踪每个寄存器对应通道的变化
+string InsNode::print2() /// print2()是跟踪每个寄存器对应通道的变化
 {
 	stringstream out;
 	out << lineNumber << ": ";
@@ -103,7 +103,7 @@ InsNode::InsNode(std::string _line, InsObjPtr _destObj, std::vector<InsNodePtr> 
 		}
 		++count;
 	}
-	// 创建transformLine
+	/// 创建transformLine
 	string behind;
 	for (int i = 0; i < sources.size(); i++)
 	{
@@ -133,7 +133,7 @@ InsObjPtr InsNode::getDest()
 bool InsNode::isObjShield(string str)
 {
 	if (str.size() > 3 && str[0] == 'l' && str[1] == '(')
-		return true;// 立即数
+		return true;/// 立即数
 	size_t point;
 	if ((point = str.find(".")) != string::npos)
 		str = str.substr(0, point);

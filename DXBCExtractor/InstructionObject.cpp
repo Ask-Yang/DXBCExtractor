@@ -98,7 +98,15 @@ void InstructionObject::setNewNode(InsNodePtr next)
 
 void InstructionObject::setInitNodeValue(Vec4f val)
 {
-    objRoot->destValue = val;
+    if (auto p = objRoot->destObj.lock())
+    {/// 因为是在计算节点进行操作，所以要用对应节点的destObj来赋值
+    /// 就是说InsNode的destObj 不是resFile里的那个，而是对应的CalcuObj
+        p->data[0] = val.x;
+        p->data[1] = val.y;
+        p->data[2] = val.z;
+        p->data[3] = val.w;
+    }
+    
 }
 
 void InstructionObject::setInitNode(InsNodePtr initNode)

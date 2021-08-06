@@ -10,12 +10,12 @@ void Instruction::calcu(InsObjPtr dest, std::vector<InsObjPtr> sources)
 {
 }
 
-// 有三种情况 
-// 第一种是只有一个命令 类似 ps_2_2 / nop
-// 第二种是只有一个命令和一个dst 类似 texkill dst
-// 第三种是有sources的 类似 abs dst, src
+/// 有三种情况 
+/// 第一种是只有一个命令 类似 ps_2_2 / nop
+/// 第二种是只有一个命令和一个dst 类似 texkill dst
+/// 第三种是有sources的 类似 abs dst, src
 
-// 然后可能有mask、swizzle可能没有，mask swizzle是命令的一部分
+/// 然后可能有mask、swizzle可能没有，mask swizzle是命令的一部分
 void Instruction::build(std::string line)
 {
 	rawLine = line;
@@ -30,29 +30,27 @@ void Instruction::build(std::string line)
 		name = line;
 		return;
 	}
-
+	/// 抽取mask
 	last = next + 1;
 	if ((point = line.find(under_point, last)) == string::npos)
 		return;
 	if ((next = line.find(space, last)) != string::npos)
-	{
 		mask = line.substr(point + 1, next - 1 - point - 1); 
-	}
 	else
 	{
-		mask = line.substr(point + 1); // ins dst.xyz 
+		mask = line.substr(point + 1); /// ins dst.xyz 
 		return;
 	}
-
+	/// 抽取swizzle
 	last = next + 1;
-	point = last; // for preventing the case: ins dst, src.xyz
+	point = last; /// for preventing the case: ins dst, src.xyz
 	while ((next = line.find(space, last)) != string::npos)
 	{
-		if (line[last] == '-')
+		if (line[last] == '-') /// 计算ins dst, -src0的情况
 		{
 			++last;
 			minusList.push_back(-1);
-		}
+		} 
 		else
 			minusList.push_back(1);
 		point = line.substr(last, next - last).find_last_of(under_point);
@@ -83,7 +81,11 @@ InsMad::InsMad(std::shared_ptr<ResourceFile> file, std::string line)
 
 void InsMad::calcu(InsObjPtr dest, std::vector<InsObjPtr> sources)
 {
-
+	InstructionObject res;
+	res = (sources[0]->swizzle(swizzleList[0])) * minusList[0] 
+		* (sources[1]->swizzle(swizzleList[1])) * minusList[1]
+		+ (sources[2]->swizzle(swizzleList[2])) * minusList[2];
+	dest->mask(mask, res);
 }
 
 InsAdd::InsAdd(std::shared_ptr<ResourceFile> file, std::string line)
@@ -94,12 +96,8 @@ InsAdd::InsAdd(std::shared_ptr<ResourceFile> file, std::string line)
 void InsAdd::calcu(InsObjPtr dest, std::vector<InsObjPtr> sources)
 {
 	InstructionObject res;
-	for (int i = 0; i < sources.size(); i++)
-	{
-		InstructionObject temp;
-		temp = (sources[i]->swizzle(swizzleList[i])) * minusList[i];
-		res = res + temp;
-	}
+	res = (sources[0]->swizzle(swizzleList[0])) * minusList[0]
+		+ (sources[1]->swizzle(swizzleList[1])) * minusList[1];
 	dest->mask(mask, res);
 }
 
@@ -173,6 +171,10 @@ InsMul::InsMul(std::shared_ptr<ResourceFile> file, std::string line)
 
 void InsMul::calcu(InsObjPtr dest, std::vector<InsObjPtr> sources)
 {
+	InstructionObject res;
+	res = (sources[0]->swizzle(swizzleList[0])) * minusList[0]
+		* (sources[1]->swizzle(swizzleList[1])) * minusList[1];
+	dest->mask(mask, res);
 }
 
 InsMov::InsMov(std::shared_ptr<ResourceFile> file, std::string line)

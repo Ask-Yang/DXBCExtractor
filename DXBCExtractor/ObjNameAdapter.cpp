@@ -23,7 +23,7 @@ std::string ObjNameAdapter::swizzle(std::string swiz)
 	vector<string> temp;
 
 	if (swiz.size() != 0)
-	{
+	{ /// 为swizzle创建对应的adapter
 		temp.resize(swiz.size());
 		for (int i = 0; i < swiz.size(); i++)
 		{
@@ -42,7 +42,7 @@ std::string ObjNameAdapter::swizzle(std::string swiz)
 		for (auto str : adapter)
 			temp.push_back(str.second);
 	}
-
+	/// 合并相邻的adapter
 	vector<int> perSufix;
 	int p = 0;
 	while (p < temp.size())
@@ -76,7 +76,7 @@ std::string ObjNameAdapter::swizzle(std::string swiz)
 
 std::string ObjNameAdapter::mask(std::string mask)
 {
-	if (initName.size() > 2 && initName[0] == 'l' && initName[1] == '(')
+	if (initName.size() > 2 && initName[0] == 'l' && initName[1] == '(') /// 立即数的名字不变
 		return initName;
 	string newName = initName + "_" + mask + "_";
 	for (int i = 0; i < mask.size(); i++)

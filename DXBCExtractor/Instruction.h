@@ -9,18 +9,18 @@ public:
 	Instruction(std::shared_ptr<ResourceFile> file, std::string line);
 	virtual void calcu(InsObjPtr dest, std::vector<InsObjPtr> sources);
 public:
-	void build(std::string line);
-	std::shared_ptr<ResourceFile> resFile;
-	std::string name;
-	std::string mask;
+	void build(std::string line); /// 构建寄存器
+	std::shared_ptr<ResourceFile> resFile; 
+	std::string name;  /// 指令的名字，如add，mul等
+	std::string mask;  /// 形如reg.xyz 中的xyz，mask就是字符串"xyz" 
 	std::vector<std::string> swizzleList;
-	std::vector<int> minusList; // calcu时记得对应相乘
-	std::string rawLine;
+	std::vector<int> minusList; /// calcu时记得对应相乘，1就是系数为1，-1就是系数为-1
+	std::string rawLine; /// 指令对应的行的
 };
 typedef std::shared_ptr<Instruction> InsPtr;
-// SetUp 没必要逆向，可以一开始解析完
-// Arithmetic, Texture 可以逆向
-// Flow control 可以一开始就把flow control拆出来，然后就当成两个文件处理，反正shader control少
+/// SetUp 没必要逆向，可以一开始解析完
+/// Arithmetic, Texture 可以逆向
+/// Flow control 可以一开始就把flow control拆出来，然后就当成两个文件处理，反正shader control少
 
 class InsMad : public Instruction {
 public:

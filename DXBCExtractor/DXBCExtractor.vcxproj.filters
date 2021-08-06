@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Instruction.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -36,6 +33,9 @@
     <ClCompile Include="InsNode.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ObjNameAdapter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Instruction.h">
@@ -51,6 +51,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="InsNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjNameAdapter.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

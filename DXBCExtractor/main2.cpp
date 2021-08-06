@@ -11,7 +11,7 @@
 #include "ObjNameAdapter.h"
 using namespace std;
 
-set<string> shieldList = {
+set<string> shieldList = { /// 增加print()的屏蔽词
     "r#", "t#"
 };
 
@@ -36,17 +36,17 @@ void readTXTtoVec2(vector<string>& src, string filepath)
     getline(fin, str);
     getline(fin, str);
     getline(fin, str); 
-    // SKIP
-    //Shader hash 0d39dcc8-6939aba8-f3773300-c06d1865
-    //
-    //ps_5_0
+    /// SKIP
+    ///Shader hash 0d39dcc8-6939aba8-f3773300-c06d1865
+    ///
+    ///ps_5_0
     while (!fin.eof())
     {
         getline(fin, str);
         if (str.size() != 0)
         {
             str = str.substr(findFirstLetter(str));
-            if(str.find("dcl_") == string::npos) // skip dcl_声明
+            if(str.find("dcl_") == string::npos) /// skip dcl_声明
                 src.push_back(str);
         }
     }
@@ -62,8 +62,9 @@ void writeVecToTXT(vector<string>& src, string filepath)
     outFile.close();
 }
 
-void setInitNodes(vector<InsNodePtr>& sourceNodes) {
-
+void setInitNodes(shared_ptr<ResourceFile> resFile) {
+    /// 如果需要计算，需要在这里设置初值。
+    resFile->res["r0"]->setInitNodeValue(Vec4f(0, 0, 0, 0));
 }
 
 int main() {
@@ -72,8 +73,8 @@ int main() {
     vector<string> dxbcSrc;
     readTXTtoVec2(dxbcSrc, "D:\\DXBCExtractor_github\\DXBCExtractor\\dxbc.txt");
     vector<InsNodePtr> nodes;
-    InsNode::printMode = 2;
-    for (int i = 0; i < dxbcSrc.size() - 1; i++) // skip ret
+    // InsNode::printMode = 2; /// printMode要在创建节点之前更改
+    for (int i = 0; i < dxbcSrc.size() - 1; i++) /// skip ret
     {
         if (i == 34)
             cout << "debug" << endl;
@@ -85,30 +86,20 @@ int main() {
         vector<InsNodePtr> sourceNodes;
         for (auto& insObj : sources)
             sourceNodes.push_back(insObj->getCurrentNode());
-        InsNodePtr current = make_shared<InsNode>(dxbcSrc[i], dest->CalcuObj, sourceNodes, instruction, i);
+        InsNodePtr current = make_shared<InsNode>(dxbcSrc[i], dest->CalcuObj, sourceNodes, instruction, i); 
         if(dest)
             dest->setNewNode(current);
         nodes.push_back(current);
     }
     vector<string> outFile;
-    setInitNodes(nodes);
+    setInitNodes(resFile);
     for (int i=0;i<nodes.size();i++)
         nodes[i]->exec();
     
     for (auto& node : nodes)
-        outFile.push_back(node->print2());
+        outFile.push_back(node->print());
     writeVecToTXT(outFile, "out.txt");
-    //for (auto& objPair : resFile->res) // 按寄存器输出
-        //objPair.second->print();
+    ///for (auto& objPair : resFile->res) /// 按寄存器输出
+        ///objPair.second->print();
 	return 0;
-}
-
-int main4342()
-{
-    ObjNameAdapter ad("r0");
-    ad.mask("xy");
-    ad.mask("yw");
-    cout << ad.swizzle("xyxx") << endl;
-
-    return 0;
 }

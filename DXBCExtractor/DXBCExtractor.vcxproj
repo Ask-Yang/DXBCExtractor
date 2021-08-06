@@ -140,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="InsNode.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Instruction.cpp" />
     <ClCompile Include="InstructionExtractor.cpp" />
     <ClCompile Include="InstructionObject.cpp" />
